@@ -5,6 +5,8 @@ import android.util.AttributeSet
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.LinearLayout
+import androidx.annotation.StyleRes
+import androidx.core.widget.TextViewCompat
 
 
 class ButtonGroup(context:Context ,attrs: AttributeSet)  : LinearLayout(context , attrs) {
@@ -14,6 +16,8 @@ class ButtonGroup(context:Context ,attrs: AttributeSet)  : LinearLayout(context 
     var unSelectedBG : Int = 0
     var selectedTextColor : Int  = 0
     var unSelectedTextColor : Int = 0
+    @StyleRes
+    var buttonTextAppearance : Int = 0
     init{
         context.theme.obtainStyledAttributes(
             attrs,
@@ -26,7 +30,7 @@ class ButtonGroup(context:Context ,attrs: AttributeSet)  : LinearLayout(context 
                     unSelectedBG  = getResourceId(R.styleable.ButtonGroup_unselected_button_bg , 0)
                     selectedTextColor  = getResourceId(R.styleable.ButtonGroup_selected_button_text_color , 0)
                     unSelectedTextColor  = getResourceId(R.styleable.ButtonGroup_unselected_button_text_color , 0)
-
+                    buttonTextAppearance =  getResourceId(R.styleable.ButtonGroup_android_textAppearance , 0)
                     setOptions()
                 } finally {
                     recycle()
@@ -50,6 +54,7 @@ class ButtonGroup(context:Context ,attrs: AttributeSet)  : LinearLayout(context 
                     setPadding(0, 10, 0, 10)
                     background = context.resources.getDrawable(unSelectedBG)
                     setTextColor(resources.getColor(unSelectedTextColor))
+                    TextViewCompat.setTextAppearance(this,buttonTextAppearance)
                     this@ButtonGroup.addView(this)
                     setOnClickListener{
                         selectedOption = text.toString()

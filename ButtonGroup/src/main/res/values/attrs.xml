@@ -6,5 +6,6 @@
         <attr name="unselected_button_bg"  format="reference" />
         <attr name="unselected_button_text_color"  format="reference" />
         <attr name="selected_button_text_color"  format="reference" />
+        <attr name="android:textAppearance"/>
     </declare-styleable>
 </resources>
