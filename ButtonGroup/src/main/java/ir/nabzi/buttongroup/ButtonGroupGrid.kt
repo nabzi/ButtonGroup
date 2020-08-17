@@ -1,15 +1,15 @@
 package ir.nabzi.buttongroup
+
 import android.content.Context
 import android.util.AttributeSet
 import android.view.Gravity
 import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams.FILL_PARENT
 import android.widget.Button
-
 import android.widget.LinearLayout
 import androidx.annotation.StyleRes
+import androidx.core.content.ContextCompat
 import androidx.core.widget.TextViewCompat
-import androidx.gridlayout.widget.GridLayout
 
 
 class ButtonGroupGrid(context:Context ,attrs: AttributeSet)  : LinearLayout(context , attrs) {
@@ -21,6 +21,8 @@ class ButtonGroupGrid(context:Context ,attrs: AttributeSet)  : LinearLayout(cont
     var unSelectedTextColor : Int = 0
     var colCount = 1
     var rowCount = 1
+    var drawableResources = arrayListOf<Int>()
+    var drawableResourcesSelected = arrayListOf<Int>()
     @StyleRes
     var buttonTextAppearance : Int = 0
     init{
@@ -38,6 +40,26 @@ class ButtonGroupGrid(context:Context ,attrs: AttributeSet)  : LinearLayout(cont
                     buttonTextAppearance =  getResourceId(R.styleable.ButtonGroup_android_textAppearance , 0)
                     colCount = getInt(R.styleable.ButtonGroup_col_count, 1)
                     rowCount = getInt(R.styleable.ButtonGroup_row_count, 1)
+                    var arrayResourceId: Int = getResourceId(R.styleable.ButtonGroup_icons, 0)
+                    if (arrayResourceId != 0) {
+                        val resourceArray =
+                            resources.obtainTypedArray(arrayResourceId)
+                        for (i in 0 until resourceArray.length()) {
+                            val resourceId = resourceArray.getResourceId(i, 0)
+                            drawableResources.add(resourceId)
+                        }
+                        resourceArray.recycle()
+                    }
+                    var arrayResourceId2: Int = getResourceId(R.styleable.ButtonGroup_selected_icons, 0)
+                    if (arrayResourceId2 != 0) {
+                        val resourceArray =
+                            resources.obtainTypedArray(arrayResourceId2)
+                        for (i in 0 until resourceArray.length()) {
+                            val resourceId = resourceArray.getResourceId(i, 0)
+                            drawableResourcesSelected.add(resourceId)
+                        }
+                        resourceArray.recycle()
+                    }
                     setOptions()
                 } finally {
                     recycle()
@@ -56,22 +78,39 @@ class ButtonGroupGrid(context:Context ,attrs: AttributeSet)  : LinearLayout(cont
             )
             layContentParams.weight = 1.0F
             linearLayout.layoutParams  = layContentParams
-            for ( option in entries.toList().slice(IntRange(row * colCount  , row  *colCount + colCount - 1))) {
+            val sublist = entries.toList().slice(IntRange(row * colCount  , row  *colCount + colCount - 1))
+            for ( (index,option) in sublist.withIndex()) {
                 val btn = Button(context)
                 val layContentParams = LinearLayout.LayoutParams(
-                    FILL_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT
+                    FILL_PARENT, ViewGroup.LayoutParams.MATCH_PARENT
                 )
                 layContentParams.gravity = Gravity.FILL_HORIZONTAL
-                layContentParams.setMargins(8, 8, 8, 8)
+                layContentParams.setMargins(2, 2, 2, 2)
                 layContentParams.weight = 1.0F
                 btnList.add(btn)
 
                 btn.run {
+                    var icon : Int? = null
+                    var iconSelected : Int? = null
+                    val btnIndex = row * colCount + index
+                    if(drawableResources.isNotEmpty() && btnIndex < drawableResources.size ) {
+                        icon = drawableResources[btnIndex]
+                    }
+                    iconSelected = if(drawableResourcesSelected.isNotEmpty() &&
+                        btnIndex < drawableResourcesSelected.size ) {
+                        drawableResourcesSelected[btnIndex]
+                    }else {
+                        icon
+                    }
+                    setBackgroundResource(unSelectedBG)
+                    icon?.let{
+                        btn.setCompoundDrawablesWithIntrinsicBounds (0,it,0,0)
+                    }
                     this.layoutParams = layContentParams
                     text = option
-                    setPadding(0, 10, 0, 10)
+                    setPadding(2, 5, 2, 5)
                     background = context.resources.getDrawable(unSelectedBG)
-                    setTextColor(resources.getColor(unSelectedTextColor))
+                    setTextColor(ContextCompat.getColor(context,unSelectedTextColor))
                     TextViewCompat.setTextAppearance(this, buttonTextAppearance)
                     linearLayout.addView(this)
                     setOnClickListener {
@@ -79,9 +118,15 @@ class ButtonGroupGrid(context:Context ,attrs: AttributeSet)  : LinearLayout(cont
                         for (btn in btnList) {
                             if (btn != it) {
                                 btn.background = context.resources.getDrawable(unSelectedBG)
+                                icon?.let{
+                                    btn.setCompoundDrawablesWithIntrinsicBounds (0,it,0,0)
+                                }
                                 btn.setTextColor(resources.getColor(unSelectedTextColor))
                             } else {
                                 it.background = context.resources.getDrawable(selectedBG)
+                                iconSelected?.let {
+                                    btn.setCompoundDrawablesWithIntrinsicBounds (0,it,0,0)
+                                }
                                 btn.setTextColor(resources.getColor(selectedTextColor))
                             }
                         }

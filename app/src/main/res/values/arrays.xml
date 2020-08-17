@@ -7,7 +7,7 @@
         <item>Button 4</item>
     </string-array>
     <string-array name="buttonList2" >
-        <item> 1</item>
+        <item> 1 </item>
         <item> 2</item>
         <item> 3</item>
         <item> 4</item>
@@ -18,4 +18,41 @@
         <item> 9</item>
         <item> 10</item>
     </string-array>
+    <string-array name="buttonListFood" >
+        <item> قبل از صبحانه </item>
+        <item> بعد از صبحانه </item>
+        <item> قبل از نهار </item>
+        <item> بعد از نهار </item>
+        <item>  قبل از شام </item>
+        <item>  بعد از شام </item>
+        <item>  قبل از ورزش </item>
+        <item> بعد از ورزش </item>
+        <item>  قبل از میان وعده </item>
+        <item>  بعد از میان وعده </item>
+    </string-array>
+    <array name="foodpics">
+        <item>@drawable/ic_bread</item>
+        <item>@drawable/ic_bread</item>
+        <item>@drawable/ic_bread</item>
+        <item>@drawable/ic_bread</item>
+        <item>@drawable/ic_bread</item>
+        <item>@drawable/ic_bread</item>
+        <item>@drawable/ic_bread</item>
+        <item>@drawable/ic_bread</item>
+        <item>@drawable/ic_bread</item>
+        <item>@drawable/ic_bread</item>
+
+    </array>
+    <array name="foodpicsSelected">
+        <item>@drawable/ic_bread_invert</item>
+        <item>@drawable/ic_bread_invert</item>
+        <item>@drawable/ic_bread_invert</item>
+        <item>@drawable/ic_bread_invert</item>
+        <item>@drawable/ic_bread_invert</item>
+        <item>@drawable/ic_bread_invert</item>
+        <item>@drawable/ic_bread_invert</item>
+        <item>@drawable/ic_bread_invert</item>
+        <item>@drawable/ic_bread_invert</item>
+        <item>@drawable/ic_bread_invert</item>
+    </array>
 </resources>
