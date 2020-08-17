@@ -2,10 +2,13 @@
 <resources>
     <declare-styleable name="ButtonGroup">
         <attr name="android:entries" />
+        <attr name="col_count" format="integer" />
+        <attr name="row_count" format="integer" />
         <attr name="selected_button_bg"  format="reference" />
         <attr name="unselected_button_bg"  format="reference" />
         <attr name="unselected_button_text_color"  format="reference" />
         <attr name="selected_button_text_color"  format="reference" />
         <attr name="android:textAppearance"/>
     </declare-styleable>
+
 </resources>
