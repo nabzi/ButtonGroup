@@ -115,10 +115,10 @@ class ButtonGroupGrid(context:Context ,attrs: AttributeSet)  : LinearLayout(cont
                     linearLayout.addView(this)
                     setOnClickListener {
                         selectedOption = text.toString()
-                        for (btn in btnList) {
+                        for ((index,btn) in btnList.withIndex()) {
                             if (btn != it) {
                                 btn.background = context.resources.getDrawable(unSelectedBG)
-                                btn.setCompoundDrawablesWithIntrinsicBounds (0,drawableResources[btnIndex],0,0)
+                                btn.setCompoundDrawablesWithIntrinsicBounds (0,drawableResources[index],0,0)
                                 btn.setTextColor(resources.getColor(unSelectedTextColor))
                             } else {
                                 it.background = context.resources.getDrawable(selectedBG)
