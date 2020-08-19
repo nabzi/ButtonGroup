@@ -118,9 +118,7 @@ class ButtonGroupGrid(context:Context ,attrs: AttributeSet)  : LinearLayout(cont
                         for (btn in btnList) {
                             if (btn != it) {
                                 btn.background = context.resources.getDrawable(unSelectedBG)
-                                icon?.let{
-                                    btn.setCompoundDrawablesWithIntrinsicBounds (0,it,0,0)
-                                }
+                                btn.setCompoundDrawablesWithIntrinsicBounds (0,drawableResources[btnIndex],0,0)
                                 btn.setTextColor(resources.getColor(unSelectedTextColor))
                             } else {
                                 it.background = context.resources.getDrawable(selectedBG)
