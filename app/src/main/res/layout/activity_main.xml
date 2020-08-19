@@ -25,10 +25,10 @@
       android:layout_marginTop="28dp"
       android:layout_marginEnd="16dp"
       android:layout_marginRight="16dp"
-      android:entries="@array/buttonListFood"
-      app:col_count="5"
-      app:icons ="@array/foodpics"
-      app:selected_icons ="@array/foodpicsSelected"
+      android:entries="@array/buttonList1"
+      app:col_count="2"
+      app:icons ="@array/pics"
+      app:selected_icons ="@array/picsSelected"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintHorizontal_bias="0.0"
       app:layout_constraintStart_toStartOf="parent"
@@ -63,18 +63,5 @@
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toTopOf="parent" />
-
-  <Button
-      android:id="@+id/button"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:text="Button"
-      android:backgroundTint="@color/colorAccent"
-      android:drawableTint="@color/colorPrimaryDark"
-      android:padding="10dp"
-      android:gravity="bottom|center"
-      android:drawableTop="@drawable/ic_bread"
-      tools:layout_editor_absoluteX="232dp"
-      tools:layout_editor_absoluteY="505dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
