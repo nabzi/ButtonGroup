@@ -2,6 +2,7 @@ package ir.nabzi.buttongroup
 
 import android.content.Context
 import android.util.AttributeSet
+import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.LinearLayout
@@ -10,8 +11,9 @@ import androidx.core.widget.TextViewCompat
 
 
 class ButtonGroup(context:Context ,attrs: AttributeSet)  : LinearLayout(context , attrs) {
+    val btnList = arrayListOf<Button>()
     var selectedOption : String = ""
-    lateinit var  entries: Array<CharSequence>
+    var entries: Array<CharSequence>? = null
     var selectedBG : Int = 0
     var unSelectedBG : Int = 0
     var selectedTextColor : Int  = 0
@@ -25,7 +27,7 @@ class ButtonGroup(context:Context ,attrs: AttributeSet)  : LinearLayout(context 
             0, 0)
             .apply {
                 try {
-                    entries  = getTextArray(R.styleable.ButtonGroup_android_entries)
+                    getTextArray(R.styleable.ButtonGroup_android_entries)?.let{ entries  =  it }
                     selectedBG  = getResourceId(R.styleable.ButtonGroup_selected_button_bg , 0)
                     unSelectedBG  = getResourceId(R.styleable.ButtonGroup_unselected_button_bg , 0)
                     selectedTextColor  = getResourceId(R.styleable.ButtonGroup_selected_button_text_color , 0)
@@ -37,11 +39,27 @@ class ButtonGroup(context:Context ,attrs: AttributeSet)  : LinearLayout(context 
                 }
         }
     }
+    fun setEntriesArray (entriesArray : Array<CharSequence>)
+    {
+        entries = entriesArray
+        setOptions()
+    }
+    fun setSelectedButton(index : Int){
+        if(btnList.size == 0) return
+        var selectedButton = btnList[index]
+        for (btn in btnList) {
+            if (btn == selectedButton) {
+                selectButton(btn)
+            }
+            else{
+                deselectButton(btn)
+            }
+        }
+    }
     private fun setOptions (){
         if(entries == null)
             return
-        val btnList = arrayListOf<Button>()
-        for (option in entries) {
+        for (option in entries!!) {
                 val btn = Button(context)
                 val layContentParams = LinearLayout.LayoutParams(
                     ViewGroup.LayoutParams.FILL_PARENT , ViewGroup.LayoutParams.WRAP_CONTENT)
@@ -56,20 +74,28 @@ class ButtonGroup(context:Context ,attrs: AttributeSet)  : LinearLayout(context 
                     setTextColor(resources.getColor(unSelectedTextColor))
                     TextViewCompat.setTextAppearance(this,buttonTextAppearance)
                     this@ButtonGroup.addView(this)
-                    setOnClickListener{
+                    setOnClickListener{selectedButton ->
                         selectedOption = text.toString()
                         for (btn in btnList) {
-                            if (btn != it) {
-                                btn.background = context.resources.getDrawable(unSelectedBG)
-                                btn.setTextColor(resources.getColor(unSelectedTextColor))
+                            if (btn == selectedButton) {
+                                selectButton(btn)
                             }
                             else{
-                                it.background = context.resources.getDrawable(selectedBG)
-                                btn.setTextColor(resources.getColor(selectedTextColor))
+                                deselectButton(btn)
                             }
                         }
                     }
                 }
             }
         }
+
+    private fun deselectButton(btn: Button) {
+        btn.background = context.resources.getDrawable(unSelectedBG)
+        btn.setTextColor(resources.getColor(unSelectedTextColor))
+    }
+
+    private fun selectButton(btn: Button) {
+        btn.background = context.resources.getDrawable(selectedBG)
+        btn.setTextColor(resources.getColor(selectedTextColor))
+    }
 }

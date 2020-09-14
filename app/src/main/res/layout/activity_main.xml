@@ -18,6 +18,7 @@
 
 
   <ir.nabzi.buttongroup.ButtonGroupGrid
+      android:id="@+id/buttonGroupGrid"
       android:layout_width="0dp"
       android:layout_height="wrap_content"
       android:layout_marginStart="16dp"
@@ -43,8 +44,8 @@
       android:id="@+id/buttonGroup"
       android:layout_width="0dp"
       android:layout_height="wrap_content"
-      android:layout_marginTop="8dp"
       android:entries="@array/buttonList2"
+      android:layout_marginTop="8dp"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintHorizontal_bias="1.0"
       app:layout_constraintStart_toStartOf="parent"

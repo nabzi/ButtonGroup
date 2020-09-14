@@ -14,7 +14,8 @@ import androidx.core.widget.TextViewCompat
 
 class ButtonGroupGrid(context:Context ,attrs: AttributeSet)  : LinearLayout(context , attrs) {
     var selectedOption : String = ""
-    lateinit var  entries: Array<CharSequence>
+    val btnList = arrayListOf<Button>()
+    var  entries: Array<CharSequence> ? = null
     var selectedBG : Int = 0
     var unSelectedBG : Int = 0
     var selectedTextColor : Int  = 0
@@ -32,7 +33,7 @@ class ButtonGroupGrid(context:Context ,attrs: AttributeSet)  : LinearLayout(cont
             0, 0)
             .apply {
                 try {
-                    entries  = getTextArray(R.styleable.ButtonGroup_android_entries)
+                    getTextArray(R.styleable.ButtonGroup_android_entries)?.let{ entries  =  it }
                     selectedBG  = getResourceId(R.styleable.ButtonGroup_selected_button_bg , 0)
                     unSelectedBG  = getResourceId(R.styleable.ButtonGroup_unselected_button_bg , 0)
                     selectedTextColor  = getResourceId(R.styleable.ButtonGroup_selected_button_text_color , 0)
@@ -66,11 +67,37 @@ class ButtonGroupGrid(context:Context ,attrs: AttributeSet)  : LinearLayout(cont
                 }
             }
     }
+    fun setEntriesArray (entriesArray : Array<CharSequence>)
+    {
+        entries = entriesArray
+        setOptions()
+    }
+    fun setSelectedButton(index : Int){
+        if(btnList.size == 0) return
+        var selectedButton = btnList[index]
+        var icon : Int =0
+        for (btn in btnList) {
+            if (btn == selectedButton) {
+                if(drawableResources.isNotEmpty() && index < drawableResources.size ) {
+                    icon = drawableResources[index]
+                }
+                var iconSelected = if(drawableResourcesSelected.isNotEmpty() &&
+                    index < drawableResourcesSelected.size ) {
+                    drawableResourcesSelected[index]
+                }else {
+                    icon
+                }
+                selectButton(btn, iconSelected)
+            }
+            else{
+                deselectButton(btn, index)
+            }
+        }
+    }
     private fun setOptions (){
         if(entries == null)
             return
         this.orientation = VERTICAL
-        val btnList = arrayListOf<Button>()
         for ( row in 0 until rowCount) {
             var linearLayout = LinearLayout(context)
             val layContentParams = LinearLayout.LayoutParams(
@@ -78,7 +105,7 @@ class ButtonGroupGrid(context:Context ,attrs: AttributeSet)  : LinearLayout(cont
             )
             layContentParams.weight = 1.0F
             linearLayout.layoutParams  = layContentParams
-            val sublist = entries.toList().slice(IntRange(row * colCount  , row  *colCount + colCount - 1))
+            val sublist = entries!!.toList().slice(IntRange(row * colCount  , row  *colCount + colCount - 1))
             for ( (index,option) in sublist.withIndex()) {
                 val btn = Button(context)
                 val layContentParams = LinearLayout.LayoutParams(
@@ -113,19 +140,13 @@ class ButtonGroupGrid(context:Context ,attrs: AttributeSet)  : LinearLayout(cont
                     setTextColor(ContextCompat.getColor(context,unSelectedTextColor))
                     TextViewCompat.setTextAppearance(this, buttonTextAppearance)
                     linearLayout.addView(this)
-                    setOnClickListener {
+                    setOnClickListener {selectedButton ->
                         selectedOption = text.toString()
                         for ((index,btn) in btnList.withIndex()) {
-                            if (btn != it) {
-                                btn.background = context.resources.getDrawable(unSelectedBG)
-                                btn.setCompoundDrawablesWithIntrinsicBounds (0,drawableResources[index],0,0)
-                                btn.setTextColor(resources.getColor(unSelectedTextColor))
+                            if (btn != selectedButton) {
+                              deselectButton(btn , index)
                             } else {
-                                it.background = context.resources.getDrawable(selectedBG)
-                                iconSelected?.let {
-                                    btn.setCompoundDrawablesWithIntrinsicBounds (0,it,0,0)
-                                }
-                                btn.setTextColor(resources.getColor(selectedTextColor))
+                               selectButton(btn , iconSelected)
                             }
                         }
                     }
@@ -135,5 +156,19 @@ class ButtonGroupGrid(context:Context ,attrs: AttributeSet)  : LinearLayout(cont
             linearLayout.orientation = HORIZONTAL
             this.addView(linearLayout)
         }
+    }
+
+    private fun deselectButton(btn: Button, index: Int) {
+        btn.background = context.resources.getDrawable(unSelectedBG)
+        btn.setCompoundDrawablesWithIntrinsicBounds (0,drawableResources[index],0,0)
+        btn.setTextColor(resources.getColor(unSelectedTextColor))
+    }
+
+    private fun selectButton(btn : Button , iconSelected : Int?) {
+        btn.background = context.resources.getDrawable(selectedBG)
+        iconSelected?.let {
+            btn.setCompoundDrawablesWithIntrinsicBounds (0,it,0,0)
+        }
+        btn.setTextColor(resources.getColor(selectedTextColor))
     }
 }
